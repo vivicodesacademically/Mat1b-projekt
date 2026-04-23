@@ -1,4 +1,14 @@
 import numpy as np
+"""
+Immport funktioner herfra til benyttelse i forskellige opgaver.
+
+En specifik funktion kan importes på følgende vis:
+from FEM_functions import <function_name>
+
+Alle funktioner kan importeres således:
+from FEM_functions import *
+"""
+
 
 def assemble_K_sinus(N, a_func):
     """Stivhedsmatrix for sinusbasis med generel a(x)."""
@@ -28,6 +38,7 @@ def assemble_p_sinus(N, p_func):
             p_vec[k-1] = np.trapezoid(p_func(x)*psi_k,x)  # integrer p(x)*psi_k med np.trapezoid
     return p_vec
 
+### Opgave 25 ###
 def assemble_p_general(nodes, p_func=None):
     """Saml lastvektoren p for vilkårligt net og kildefunktion p(x)."""
     N = len(nodes) - 2
@@ -53,6 +64,7 @@ def assemble_p_general(nodes, p_func=None):
         
     return p_vec
 
+### Opgave 24 ###
 def assemble_K_general(nodes, a_func=None):
     """Saml K for vilkårligt net og funktion a(x)."""
     N = len(nodes) - 2

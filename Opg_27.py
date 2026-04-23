@@ -1,21 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from opg_24 import assemble_K_general
-from opg_25 import assemble_p_general
-
-#plot function
-def FEM_y(x, u):
-    N = len(u)
-    h = 1.0 / (N + 1)  # skridtlængde
-    phi = [0]*N 
-    for k in range(1, N + 1):
-        x_k = k*h  # knudepunktets position
-        x_pk = (k+1)*h
-        x_mk = (k-1)*h
-        phi[k-1] = u[k-1]*np.piecewise(x_plot, 
-            [(x_plot >= x_mk) & (x_plot < x_k), (x_plot < x_pk) & (x_plot >= x_k)], 
-            [lambda x: ((x-x_mk)/(x_k-x_mk)), lambda x: ((x_pk-x)/(x_pk-x_k)), 0]) 
-    return sum(phi)
+from FEM_functions import assemble_K_general
+from FEM_functions import assemble_p_general
+from FEM_functions import FEM_y
 
 def a_func(x):
     if 0 <= x <= 1/2:
