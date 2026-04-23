@@ -92,15 +92,16 @@ def assemble_K_general(nodes, a_func=None):
                     K[i_local, j_local] += k_local[a, b]
     return K
 
-def FEM_y(x_plot, u):
+def FEM_y(x_plot, u, net=None):
     """Calculate the function values with formfunctions based on the u from the solved system."""
     N = len(u)
-    h = 1.0 / (N + 1)  # skridtlængde
-    phi = [0]*N 
-    for k in range(1, N + 1):
-        x_k = k*h  # knudepunktets position
-        x_pk = (k+1)*h
-        x_mk = (k-1)*h
+    if net is None:
+        net = [a*(1.0/((N)+1)) for a in range(N+2)]
+    phi = [0]*(N) 
+    for k in range(1, N+1):
+        x_k = net[k]  # knudepunktets position
+        x_pk = net[k+1]
+        x_mk = net[k-1]
         phi[k-1] = u[k-1]*np.piecewise(x_plot, 
             [(x_plot >= x_mk) & (x_plot < x_k), (x_plot < x_pk) & (x_plot >= x_k)], 
             [lambda x: ((x-x_mk)/(x_k-x_mk)), lambda x: ((x_pk-x)/(x_pk-x_k)), 0]) 
