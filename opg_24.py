@@ -25,7 +25,3 @@ def assemble_K_general(nodes, a_func=None):
                 if 0 <= i_local < N and 0 <= j_local < N:
                     K[i_local, j_local] += k_local[a, b]
     return K
-
-N = 5
-nodes = [ a*(1/(N+1)) for a in range(N+2) ]
-print(assemble_K_general(nodes))
