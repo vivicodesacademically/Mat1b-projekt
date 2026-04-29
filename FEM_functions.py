@@ -114,3 +114,33 @@ def SinusBasis_y(x,u):
     for k in range(1, len(u) + 1):
         u_hat += u[k-1] * np.sin(k * np.pi * x)
     return u_hat
+
+def fem_solution(x_fine, u_coeffs, N):
+    """Evaluer FEM-løsningen på et fint gitter via stykkevis lineær interpolation."""
+    u_full = np.concatenate([[0.0], u_coeffs, [0.0]])
+    x_nodes = np.linspace(0, 1, N + 2)
+    return np.interp(x_fine, x_nodes, u_full)
+
+def l2_error(N, nodes=None, a_func=None, p_func=None, u_exact=None):
+    """Beregn L2-fejlnormen F(N) = ||u - u_hat||_2."""    
+    if (u_exact!=None or a_func!=None or p_func!=None) and (u_exact==None or a_func==None or p_func==None):
+        return "a(x), p(x) and u(x) must all be defined, or not defined."
+    if nodes==None:
+        nodes=np.linspace(0, 1, N+2)
+    if a_func==None:
+        a_func=lambda x: 1
+    if p_func==None:
+        p_func=lambda x: 1
+    if u_exact==None:
+        u_exact = lambda x: x*(1-x)/2 # eksakt løsning u(x) = x(1-x)/2
+    
+    K = assemble_K_general(nodes, a_func)  # saml stivhedsmatrixen
+    p_vec = assemble_p_general(nodes, p_func)  # saml lastvektoren
+    u = np.linalg.solve(K, p_vec)  # løs systemet
+    x_fine = np.linspace(0, 1, 1000)  # fint gitter til integration
+    u_approx = fem_solution(x_fine, u, N)  # evaluer FEM-løsningen på x_fine
+  
+    try:
+        return np.sqrt(np.trapezoid((u_exact(x_fine)-u_approx)**2, x_fine))  # returner L2-normen af fejlen (brug np.trapezoid)
+    except:
+        return np.sqrt(np.trapz((u_exact(x_fine)-u_approx)**2, x_fine)) # returner L2-normen af fejlen (brug np.trapezoid)
