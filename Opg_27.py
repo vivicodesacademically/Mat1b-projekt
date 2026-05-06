@@ -44,7 +44,7 @@ label = "a(x)=\n2,   0 ≤ x ≤ 1/2\n1,   1/2 < x ≤ 1"
 plt.plot(x_plot, FEM_y(x_plot, u_a),'r-', label=label)
 plt.plot(x_plot,FEM_y(x_plot,u_a1),'b--', label=f'$a(x)=1, N={N}$')
 plt.plot(x_plot,FEM_y(x_plot,u_a2),'g--', label=f'$a(x)=2, N={N}$')
-
+plt.plot(x_plot,(FEM_y(x_plot,u_a2)+FEM_y(x_plot,u_a1))/2,'g--', label=f'$a(x)=2, N={N}$')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
